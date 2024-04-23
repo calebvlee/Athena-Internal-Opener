@@ -1,17 +1,27 @@
 // ==UserScript==
-// @name        Auto Internal Opener for Athena Chats V1.11
+// @name        Auto Internal Opener for Athena Chats V1.12 (Mac + PC)
 // @namespace   Violentmonkey Scripts
 // @match       https://athena.shopify.io/*
 // @grant       none
 // @version     1.11
-// @author      Caleb Lee
+// @author      Caleb Lee (Credits to Nicholas Bulmer & Renee Mundie)
 // @description 22/04/2024, 12:04:56
 // ==/UserScript==
 
 
+
 (function () {
-  // Flag to keep track of whether Shift and Command keys are down
-  let shiftCmdDown = false;
+  // Function to detect OS
+  function detectOS() {
+    let platform = navigator.platform.toLowerCase();
+    if (platform.includes('mac')) return 'macOS';
+    if (platform.includes('win')) return 'Windows';
+    if (platform.includes('linux')) return 'Linux';
+    return 'Unknown';
+  }
+
+  const os = detectOS();
+  console.log(`Detected OS: ${os}`);
 
   function openButtonInNewTab() {
     const buttons = document.querySelectorAll(".Polaris-Button_r99lw");
@@ -27,24 +37,14 @@
     });
   }
 
-  // Event listener for keydown - to capture all keys pressed together
+  // Event listener for keydown
   document.addEventListener("keydown", function (event) {
-    // Check if both Shift and Command keys are held down
-    if (event.shiftKey && event.metaKey) {
-      shiftCmdDown = true;
-    }
-
-    // When "1" is pressed while Shift and Command are down, call the function
-    if (shiftCmdDown && event.key === '1') {
+    if (os === 'macOS' && event.shiftKey && event.metaKey && event.key === '1') {
+      console.log('Executing for macOS with Shift + Cmd + 1');
       openButtonInNewTab();
-    }
-  });
-
-  // Event listener for keyup - to reset flags when keys are released
-  document.addEventListener("keyup", function (event) {
-    // Reset the shiftCmdDown flag if Shift or Command are released
-    if (event.key === 'Shift' || event.key === 'Meta') {
-      shiftCmdDown = false;
+    } else if ((os === 'Windows' || os === 'Linux') && event.shiftKey && event.ctrlKey && event.key === '1') {
+      console.log('Executing for Windows/Linux with Shift + Ctrl + 1');
+      openButtonInNewTab();
     }
   });
 })();
