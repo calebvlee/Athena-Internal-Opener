@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name        Auto Internal Opener for Athena Chats V1.12 (Mac + PC)
+// @name        Auto Internal Opener for Athena Chats V1.13 (Mac)
 // @namespace   Violentmonkey Scripts
 // @match       https://athena.shopify.io/*
 // @grant       none
-// @version     1.11
+// @version     1.13
 // @author      Caleb Lee (Credits to Nicholas Bulmer & Renee Mundie)
 // @description 22/04/2024, 12:04:56
 // ==/UserScript==
