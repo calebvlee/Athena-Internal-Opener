@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Auto Internal Opener for Athena Chats V1.13 (Mac)
+// @name        Auto Internal Opener for Athena Chats V1.13 (PC)
 // @namespace   Violentmonkey Scripts
 // @match       https://athena.shopify.io/*
 // @grant       none
