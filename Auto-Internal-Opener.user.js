@@ -1,17 +1,16 @@
 // ==UserScript==
-// @name        Auto Internal Opener for Athena Chats V1.13 (Mac)
-// @namespace   Violentmonkey Scripts
-// @match       https://athena.shopify.io/*
+// @name        Auto Internal Opener for Beacon Athena V1.15 (Mac)
+// @namespace   
+// @match       https://beacon.shopify.io/*
 // @grant       none
-// @version     1.13
+// @version     1.15
 // @author      Caleb Lee (Credits to Nicholas Bulmer & Renee Mundie)
-// @description 22/04/2024, 12:04:56
+// @description 22/05/2024
 // ==/UserScript==
 
 
 
 (function () {
-  // Function to detect OS
   function detectOS() {
     let platform = navigator.platform.toLowerCase();
     if (platform.includes('mac')) return 'macOS';
@@ -24,27 +23,26 @@
   console.log(`Detected OS: ${os}`);
 
   function openButtonInNewTab() {
-    const buttons = document.querySelectorAll(".Polaris-Button_r99lw");
-    console.log('Opening tabs for these buttons:', buttons);
-    buttons.forEach((button) => {
-      if (
-        button.innerHTML.includes("Internal") ||
-        button.innerHTML.includes("Admin") ||
-        button.innerHTML.includes("Storefront")
-      ) {
-        button.click();
+    // Selecting all buttons since class names are unreliable
+    const buttons = document.querySelectorAll("button");
+    console.log('Attempting to open tabs for these buttons:', buttons);
+    buttons.forEach(button => {
+      if (button.innerHTML.includes("Internal") ||
+          button.innerHTML.includes("Admin") ||
+          button.innerHTML.includes("Storefront")) {
+        console.log(`Clicking button with label: ${button.innerHTML}`);
+        button.click();  // Simulate a click on the button
       }
     });
   }
 
   // Event listener for keydown
   document.addEventListener("keydown", function (event) {
-    if (os === 'macOS' && event.shiftKey && event.metaKey && event.key === '1') {
-      console.log('Executing for macOS with Shift + Cmd + 1');
-      openButtonInNewTab();
-    } else if ((os === 'Windows' || os === 'Linux') && event.shiftKey && event.ctrlKey && event.key === '1') {
-      console.log('Executing for Windows/Linux with Shift + Ctrl + 1');
-      openButtonInNewTab();
+    // Filtering event key based on the OS used to adapt modifier keys
+    if ((os === 'macOS' && event.shiftKey && event.metaKey && event.key === '1') ||
+        ((os === 'Windows' || os === 'Linux') && event.shiftKey && event.ctrlKey && event.key === '1')) {
+      console.log(`Triggering button click for OS: ${os} with combination Shift + Modifier + 1`);
+      openButtonInNewTab();  // Executes the function to open tabs
     }
   });
 })();
