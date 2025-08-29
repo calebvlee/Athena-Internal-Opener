@@ -3,9 +3,9 @@
 // @namespace
 // @match       https://beacon.shopify.io/*
 // @grant       none
-// @version     1.16
+// @version     1.18
 // @author      Caleb Lee (Credits to Nicholas Bulmer & Renee Mundie)
-// @description 28/08/2025
+// @description 29/08/2025
 // @run-at      document-idle
 // ==/UserScript==
 
@@ -23,6 +23,21 @@
   const os = detectOS();
   console.log(`[Beacon Helper] Detected OS: ${os}`);
 
+  // Ensure our button always uses the same rounding token as the app
+  function ensureOpenAllStyles() {
+    if (document.getElementById("open-all-style")) return;
+    const style = document.createElement("style");
+    style.id = "open-all-style";
+    style.textContent = `
+      button[data-open-all="true"]{
+        border-radius: var(--radius-lg) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  ensureOpenAllStyles();
+
   function findButtons() {
     return Array.from(document.querySelectorAll("button"));
   }
@@ -33,22 +48,13 @@
 
   function clickThreeTargets() {
     const buttons = findButtons();
-    console.log("[Beacon Helper] Scanning buttons to click:", buttons.length);
-
     buttons.forEach((button) => {
       const text = labelFor(button);
-      if (button.dataset && button.dataset.openAll === "true") return; // don't click our injected button
+      if (button.dataset && button.dataset.openAll === "true") return;
       if (TARGET_LABELS.some((t) => text.includes(t))) {
-        console.log(`[Beacon Helper] Clicking: ${text}`);
         button.click();
       }
     });
-  }
-
-  function findAnyTargetButton() {
-    return findButtons().find((b) =>
-      TARGET_LABELS.some((t) => labelFor(b).includes(t))
-    );
   }
 
   function insertOpenAllButton() {
@@ -62,17 +68,19 @@
     const container = anchorBtn.parentElement;
     if (!container) return false;
 
-    if (container.querySelector('[data-open-all="true"]')) return true; // already added
+    if (container.querySelector('[data-open-all="true"]')) return true;
 
-    // Create a new button styled like the existing ones (copy className)
     const openAllBtn = document.createElement("button");
     openAllBtn.type = "button";
     openAllBtn.textContent = "Open All";
     openAllBtn.dataset.openAll = "true";
     openAllBtn.className = anchorBtn.className;
 
-    // Keep simple spacing if needed
-    openAllBtn.style.marginLeft = openAllBtn.style.marginLeft || "6px";
+    // Keep it visually separate from the grouped buttons so its own rounding applies
+    openAllBtn.style.marginLeft = "8px";
+
+    // Use the app's token for both corners
+    openAllBtn.style.setProperty("border-radius", "var(--radius-lg)", "important");
 
     openAllBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -84,8 +92,8 @@
     return true;
   }
 
-  // Add the button when the UI appears and on future updates
   const observer = new MutationObserver(() => {
+    ensureOpenAllStyles();
     insertOpenAllButton();
   });
 
@@ -94,20 +102,15 @@
     subtree: true,
   });
 
-  // Try immediately as well
   insertOpenAllButton();
 
-  // Keyboard shortcut: Shift + Meta + 1 (macOS) or Shift + Ctrl + 1 (Win/Linux)
+  // Keyboard shortcut: Shift+Cmd+1 (macOS) or Shift+Ctrl+1 (Windows/Linux)
   document.addEventListener("keydown", (event) => {
     const macCombo = os === "macOS" && event.shiftKey && event.metaKey && event.key === "1";
     const otherCombo = (os === "Windows" || os === "Linux") && event.shiftKey && event.ctrlKey && event.key === "1";
     if (macCombo || otherCombo) {
-      console.log(`[Beacon Helper] Shortcut detected (${os}). Triggering 'Open All'.`);
+      event.preventDefault();
       clickThreeTargets();
     }
   });
-})();// ==UserScript==
-// @name New Script
-// @namespace OrangeMonkey Scripts
-// @grant none
-// ==/UserScript==
+})();
