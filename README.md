@@ -23,6 +23,7 @@ IMPORTANT NOTE: ViolentMonkey is deprecated. Follow instructions below and use O
 
 **5) Configure Chrome**
 * Restart Chrome or refresh your Beacon Athena tab so OrangeMonkey detects the script.
+* Go to chrome://extensions/ and enable Developer Mode 
 
 **6) Allow pop‑ups for Beacon Athena**
 * Open Beacon Athena (beacon.shopify.io) in a tab.
@@ -41,6 +42,7 @@ IMPORTANT NOTE: ViolentMonkey is deprecated. Follow instructions below and use O
     * Confirm the script shows as Enabled in OrangeMonkey.
     * Refresh the Beacon Athena page after installing.
     * Verify pop‑ups are Allowed for beacon.shopify.io.
+    * Double check that Chrome Extensions are in Developer Mode
     * Disable other userscript managers (e.g., Violentmonkey) to prevent conflicts.
 * Only some tabs open:
     * Check your script’s @match/@include patterns cover the current Athena URL.
